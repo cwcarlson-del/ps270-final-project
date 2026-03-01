@@ -12,3 +12,40 @@ output:
 ## Project thoughts
 
 I am interested in exploring data related to campaign spending and electoral performance. Basically, I want to investigate if higher campaign spending actually correlates with more electoral success. Using the data from the FEC, I will be able to analyze the relation. Lastly, through data visualization and regression analysis, this project will be able to accurately inform me if campaign spending and electoral performance are positively correlated.
+
+
+## Milestone #2
+
+Research Question: Does higher spending on campaigns lead to more electoral success in US congressional elections?
+
+Paragraph: To begin, I am going to get my data from the Federal Election Commission (FEC), and I hypothesize that candidates who spend more money on their campaigns end up getting a higher share of votes. I say this because of the resource mobilization theory. This concept refers to the idea that money allows candidates to purchase ads, hire more staff, build name recognition, and conduct voter outreach, which should lead to more votes. Another way of saying this, spending is a resource that pushes better-funded candidates into a more advantageous position, regardless of actual policy/leadership. Secondly, the explanatory variable in this experiment is the total campaign expenditures for each candidate in an election (measured by the FEC). This variable will have a lot of variation for each candidate, ranging from a couple thousand dollars to millions. Third, the outcome variable is the vote share for each candidate. This is measured by the % of total votes received by candidate in their race. Lastly, a pattern that would support my hypothesis would be a statistically significant positive coefficient on campaign spending in a regression of vote share on expenditures. In other words, this means that candidates who spend more, usually win a larger share of votes. On the other hand, my hypothesis would be proven false if the regression shows that there is no statistically significant relationship/negative relationship for spending and vote share. 
+
+
+## Code for Milestone #2:
+
+```{r}
+library(tidyverse)
+```
+
+
+```{r}
+fec_cols <- c("CAND_ID", "CAND_NAME", "CAND_ICI", "PTY_CD", "CAND_PTY_AFFILIATION",
+              "TTL_RECEIPTS", "TRANS_FROM_AUTH", "TTL_DISB", "TRANS_TO_AUTH",
+              "COH_BOP", "COH_COP", "CAND_CONTRIB", "CAND_LOANS", "OTHER_LOANS",
+              "CAND_LOAN_REPAY", "OTHER_LOAN_REPAY", "DEBTS_OWED_BY", "TTL_INDIV_CONTRIB",
+              "CAND_OFFICE_ST", "CAND_OFFICE_DISTRICT", "SPEC_ELECTION", "PRIM_ELECTION",
+              "RUN_ELECTION", "GEN_ELECTION", "GEN_ELECTION_PRECENT", "OTHER_POL_CMTE_CONTRIB",
+              "POL_PTY_CONTRIB", "CVG_END_DT", "INDIV_REFUNDS", "CMTE_REFUNDS")
+
+fec <- read_delim("weball22.txt", delim = "|", col_names = fec_cols,
+                  show_col_types = FALSE)
+
+head(fec)
+```
+
+```{r}
+mit <- read_csv("1976-2024-house.tab", show_col_types = FALSE)
+
+head(mit)
+```
+

@@ -116,7 +116,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["index_files/anchor-4.2.2/anchor.min.js","index_files/bowser-1.9.3/bowser.min.js","index_files/distill-2.2.21/template.v2.js","index_files/header-attrs-2.17/header-attrs.js","index_files/header-attrs-2.30/header-attrs.js","index_files/jquery-3.6.0/jquery-3.6.0.js","index_files/jquery-3.6.0/jquery-3.6.0.min.js","index_files/jquery-3.6.0/jquery-3.6.0.min.map","index_files/popper-2.6.0/popper.min.js","index_files/tippy-6.2.7/tippy-bundle.umd.min.js","index_files/tippy-6.2.7/tippy-light-border.css","index_files/tippy-6.2.7/tippy.css","index_files/tippy-6.2.7/tippy.umd.min.js","index_files/webcomponents-2.0.0/webcomponents.js"]}
+  {"type":"character","attributes":{},"value":["1976-2024-house.tab","index_files/anchor-4.2.2/anchor.min.js","index_files/bowser-1.9.3/bowser.min.js","index_files/distill-2.2.21/template.v2.js","index_files/header-attrs-2.17/header-attrs.js","index_files/header-attrs-2.30/header-attrs.js","index_files/jquery-3.6.0/jquery-3.6.0.js","index_files/jquery-3.6.0/jquery-3.6.0.min.js","index_files/jquery-3.6.0/jquery-3.6.0.min.map","index_files/popper-2.6.0/popper.min.js","index_files/tippy-6.2.7/tippy-bundle.umd.min.js","index_files/tippy-6.2.7/tippy-light-border.css","index_files/tippy-6.2.7/tippy.css","index_files/tippy-6.2.7/tippy.umd.min.js","index_files/webcomponents-2.0.0/webcomponents.js","weball22.txt"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
   <!--/radix_placeholder_navigation_in_header-->
@@ -1546,7 +1546,68 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <div class="d-article">
 <h2 id="project-thoughts">Project thoughts</h2>
 <p>I am interested in exploring data related to campaign spending and electoral performance. Basically, I want to investigate if higher campaign spending actually correlates with more electoral success. Using the data from the FEC, I will be able to analyze the relation. Lastly, through data visualization and regression analysis, this project will be able to accurately inform me if campaign spending and electoral performance are positively correlated.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<h2 id="milestone-2">Milestone #2</h2>
+<p>Research Question: Does higher spending on campaigns lead to more electoral success in US congressional elections?</p>
+<p>Paragraph: To begin, I am going to get my data from the Federal Election Commission (FEC), and I hypothesize that candidates who spend more money on their campaigns end up getting a higher share of votes. I say this because of the resource mobilization theory. This concept refers to the idea that money allows candidates to purchase ads, hire more staff, build name recognition, and conduct voter outreach, which should lead to more votes. Another way of saying this, spending is a resource that pushes better-funded candidates into a more advantageous position, regardless of actual policy/leadership. Secondly, the explanatory variable in this experiment is the total campaign expenditures for each candidate in an election (measured by the FEC). This variable will have a lot of variation for each candidate, ranging from a couple thousand dollars to millions. Third, the outcome variable is the vote share for each candidate. This is measured by the % of total votes received by candidate in their race. Lastly, a pattern that would support my hypothesis would be a statistically significant positive coefficient on campaign spending in a regression of vote share on expenditures. In other words, this means that candidates who spend more, usually win a larger share of votes. On the other hand, my hypothesis would be proven false if the regression shows that there is no statistically significant relationship/negative relationship for spending and vote share.</p>
+<h2 id="code-for-milestone-2">Code for Milestone #2:</h2>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span></span></code></pre>
+</div>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>fec_cols</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"CAND_ID"</span>, <span class='st'>"CAND_NAME"</span>, <span class='st'>"CAND_ICI"</span>, <span class='st'>"PTY_CD"</span>, <span class='st'>"CAND_PTY_AFFILIATION"</span>,</span>
+<span>              <span class='st'>"TTL_RECEIPTS"</span>, <span class='st'>"TRANS_FROM_AUTH"</span>, <span class='st'>"TTL_DISB"</span>, <span class='st'>"TRANS_TO_AUTH"</span>,</span>
+<span>              <span class='st'>"COH_BOP"</span>, <span class='st'>"COH_COP"</span>, <span class='st'>"CAND_CONTRIB"</span>, <span class='st'>"CAND_LOANS"</span>, <span class='st'>"OTHER_LOANS"</span>,</span>
+<span>              <span class='st'>"CAND_LOAN_REPAY"</span>, <span class='st'>"OTHER_LOAN_REPAY"</span>, <span class='st'>"DEBTS_OWED_BY"</span>, <span class='st'>"TTL_INDIV_CONTRIB"</span>,</span>
+<span>              <span class='st'>"CAND_OFFICE_ST"</span>, <span class='st'>"CAND_OFFICE_DISTRICT"</span>, <span class='st'>"SPEC_ELECTION"</span>, <span class='st'>"PRIM_ELECTION"</span>,</span>
+<span>              <span class='st'>"RUN_ELECTION"</span>, <span class='st'>"GEN_ELECTION"</span>, <span class='st'>"GEN_ELECTION_PRECENT"</span>, <span class='st'>"OTHER_POL_CMTE_CONTRIB"</span>,</span>
+<span>              <span class='st'>"POL_PTY_CONTRIB"</span>, <span class='st'>"CVG_END_DT"</span>, <span class='st'>"INDIV_REFUNDS"</span>, <span class='st'>"CMTE_REFUNDS"</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>fec</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_delim</a></span><span class='op'>(</span><span class='st'>"weball22.txt"</span>, delim <span class='op'>=</span> <span class='st'>"|"</span>, col_names <span class='op'>=</span> <span class='va'>fec_cols</span>,</span>
+<span>                  show_col_types <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>fec</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code># A tibble: 6 × 30
+  CAND_ID  CAND_NAME CAND_ICI PTY_CD CAND_PTY_AFFILIATION TTL_RECEIPTS
+  &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;                       &lt;dbl&gt;
+1 H2AK002… CONSTANT… C             1 DEM                       164638.
+2 H2AK011… PELTOLA,… I             1 DEM                      7751293.
+3 H2AK012… WOOL, AD… O             1 DEM                        16217.
+4 H2AK002… REVAK, J… O             2 REP                       121841 
+5 H2AK002… PALIN, S… O             2 REP                      1971161.
+6 H2AK010… PURHAM, … C             2 REP                         1549.
+# ℹ 24 more variables: TRANS_FROM_AUTH &lt;dbl&gt;, TTL_DISB &lt;dbl&gt;,
+#   TRANS_TO_AUTH &lt;dbl&gt;, COH_BOP &lt;dbl&gt;, COH_COP &lt;dbl&gt;,
+#   CAND_CONTRIB &lt;dbl&gt;, CAND_LOANS &lt;dbl&gt;, OTHER_LOANS &lt;dbl&gt;,
+#   CAND_LOAN_REPAY &lt;dbl&gt;, OTHER_LOAN_REPAY &lt;dbl&gt;,
+#   DEBTS_OWED_BY &lt;dbl&gt;, TTL_INDIV_CONTRIB &lt;dbl&gt;,
+#   CAND_OFFICE_ST &lt;chr&gt;, CAND_OFFICE_DISTRICT &lt;chr&gt;,
+#   SPEC_ELECTION &lt;lgl&gt;, PRIM_ELECTION &lt;lgl&gt;, RUN_ELECTION &lt;lgl&gt;, …</code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>mit</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></span><span class='op'>(</span><span class='st'>"1976-2024-house.tab"</span>, show_col_types <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>mit</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code># A tibble: 6 × 20
+   year state   state_po state_fips state_cen state_ic office district
+  &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;         &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt;
+1  1976 ALABAMA AL                1        63       41 US HO…        1
+2  1976 ALABAMA AL                1        63       41 US HO…        1
+3  1976 ALABAMA AL                1        63       41 US HO…        1
+4  1976 ALABAMA AL                1        63       41 US HO…        2
+5  1976 ALABAMA AL                1        63       41 US HO…        2
+6  1976 ALABAMA AL                1        63       41 US HO…        2
+# ℹ 12 more variables: stage &lt;chr&gt;, runoff &lt;lgl&gt;, special &lt;lgl&gt;,
+#   candidate &lt;chr&gt;, party &lt;chr&gt;, writein &lt;lgl&gt;, mode &lt;chr&gt;,
+#   candidatevotes &lt;dbl&gt;, totalvotes &lt;dbl&gt;, unofficial &lt;lgl&gt;,
+#   version &lt;dbl&gt;, fusion_ticket &lt;lgl&gt;</code></pre>
+</div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
