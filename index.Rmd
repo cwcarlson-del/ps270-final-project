@@ -54,7 +54,8 @@ head(mit)
 ## Milestone #3
 
 ## Data Cleaning
-```{r clean}
+
+```{r}
 mit_clean <- mit |>
   filter(year == 2022, stage == "GEN") |>
   filter(party %in% c("DEMOCRAT", "REPUBLICAN")) |>
@@ -71,7 +72,7 @@ mit_clean <- mit |>
 knitr::opts_chunk$set(echo = TRUE, fig.show = "asis", fig.width = 8, fig.height = 5)
 ```
 
-```{r, fig.show="asis"}
+```{r}
 plot_q4 <- ggplot(mit_clean, aes(x = vote_share, fill = party)) +
   geom_histogram(binwidth = 5, color = "white") +
   scale_fill_manual(values = c("DEMOCRAT" = "#1375B7", "REPUBLICAN" = "#C93135")) +
