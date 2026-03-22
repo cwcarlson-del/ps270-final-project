@@ -71,7 +71,7 @@ mit_clean <- mit |>
 knitr::opts_chunk$set(echo = TRUE, fig.show = "asis", fig.width = 8, fig.height = 5)
 ```
 
-```{r}
+```{r, fig.show="asis"}
 ggplot(mit_clean, aes(x = vote_share, fill = party)) +
   geom_histogram(binwidth = 5, color = "white") +
   scale_fill_manual(values = c("DEMOCRAT" = "#1375B7", "REPUBLICAN" = "#C93135")) +
