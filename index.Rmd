@@ -49,3 +49,31 @@ mit <- read_csv("1976-2024-house.tab", show_col_types = FALSE)
 head(mit)
 ```
 
+## Milestone #3
+
+## Data Cleaning
+```{r clean}
+mit_clean <- mit |>
+  filter(year == 2022, stage == "GEN") |>
+  filter(party %in% c("DEMOCRAT", "REPUBLICAN")) |>
+  filter(!is.na(candidatevotes), !is.na(totalvotes)) |>
+  mutate(vote_share = (candidatevotes / totalvotes) * 100) |>
+  filter(vote_share < 100)
+```
+
+---
+
+## Data Visualization
+```{r visualization}
+ggplot(mit_clean, aes(x = vote_share, fill = party)) +
+  geom_histogram(binwidth = 5, color = "white") +
+  scale_fill_manual(values = c("DEMOCRAT" = "#1375B7", "REPUBLICAN" = "#C93135")) +
+  labs(title = "Distribution of Vote Share in 2022 U.S. House Elections",
+       subtitle = "General election candidates only, by party",
+       x = "Vote Share (%)",
+       y = "Number of Candidates",
+       fill = "Party",
+       caption = "Source: MIT Election Data and Science Lab") +
+  theme_minimal()
+```
+
