@@ -25,6 +25,7 @@ Paragraph: To begin, I am going to get my data from the Federal Election Commiss
 
 ```{r}
 library(tidyverse)
+library(scales)
 ```
 
 
