@@ -23,14 +23,14 @@ Paragraph: To begin, I am going to get my data from the Federal Election Commiss
 
 ## Code for Milestone #2:
 
-```{r}
+
+``` r
 library(tidyverse)
-library(scales)
 ```
 
 
 
-```{r}
+``` r
 fec_cols <- c("CAND_ID", "CAND_NAME", "CAND_ICI", "PTY_CD", "CAND_PTY_AFFILIATION",
               "TTL_RECEIPTS", "TRANS_FROM_AUTH", "TTL_DISB", "TRANS_TO_AUTH",
               "COH_BOP", "COH_COP", "CAND_CONTRIB", "CAND_LOANS", "OTHER_LOANS",
@@ -45,16 +45,47 @@ fec <- read_delim("weball22.txt", delim = "|", col_names = fec_cols,
 head(fec)
 ```
 
-```{r}
+```
+## # A tibble: 6 × 30
+##   CAND_ID   CAND_NAME   CAND_ICI PTY_CD CAND_PTY_AFFILIATION TTL_RECEIPTS TRANS_FROM_AUTH TTL_DISB TRANS_TO_AUTH COH_BOP COH_COP
+##   <chr>     <chr>       <chr>     <dbl> <chr>                       <dbl>           <dbl>    <dbl>         <dbl>   <dbl>   <dbl>
+## 1 H2AK00200 CONSTANT, … C             1 DEM                       164638.              0   164638.             0       0      0 
+## 2 H2AK01158 PELTOLA, M… I             1 DEM                      7751293.         186868. 7060033.             0       0 691260.
+## 3 H2AK01240 WOOL, ADAM… O             1 DEM                        16217.              0    16217.             0       0      0 
+## 4 H2AK00218 REVAK, JOS… O             2 REP                       121841               0   121841              0       0      0 
+## 5 H2AK00226 PALIN, SAR… O             2 REP                      1971161.         112963. 1924781.             0       0  46380.
+## 6 H2AK01059 PURHAM, RA… C             2 REP                         1549.              0     5622.             0     140      0 
+## # ℹ 19 more variables: CAND_CONTRIB <dbl>, CAND_LOANS <dbl>, OTHER_LOANS <dbl>, CAND_LOAN_REPAY <dbl>, OTHER_LOAN_REPAY <dbl>,
+## #   DEBTS_OWED_BY <dbl>, TTL_INDIV_CONTRIB <dbl>, CAND_OFFICE_ST <chr>, CAND_OFFICE_DISTRICT <chr>, SPEC_ELECTION <lgl>,
+## #   PRIM_ELECTION <lgl>, RUN_ELECTION <lgl>, GEN_ELECTION <lgl>, GEN_ELECTION_PRECENT <lgl>, OTHER_POL_CMTE_CONTRIB <dbl>,
+## #   POL_PTY_CONTRIB <dbl>, CVG_END_DT <chr>, INDIV_REFUNDS <dbl>, CMTE_REFUNDS <dbl>
+```
+
+
+``` r
 mit <- read_csv("1976-2024-house.tab", show_col_types = FALSE)
 
 head(mit)
 ```
 
+```
+## # A tibble: 6 × 20
+##    year state   state_po state_fips state_cen state_ic office   district stage runoff special candidate      party writein mode 
+##   <dbl> <chr>   <chr>         <dbl>     <dbl>    <dbl> <chr>       <dbl> <chr> <lgl>  <lgl>   <chr>          <chr> <lgl>   <chr>
+## 1  1976 ALABAMA AL                1        63       41 US HOUSE        1 GEN   FALSE  FALSE   "BILL DAVENPO… DEMO… FALSE   TOTAL
+## 2  1976 ALABAMA AL                1        63       41 US HOUSE        1 GEN   FALSE  FALSE   "JACK EDWARDS" REPU… FALSE   TOTAL
+## 3  1976 ALABAMA AL                1        63       41 US HOUSE        1 GEN   FALSE  FALSE   "WRITEIN"      <NA>  TRUE    TOTAL
+## 4  1976 ALABAMA AL                1        63       41 US HOUSE        2 GEN   FALSE  FALSE   "J CAROLE KEA… DEMO… FALSE   TOTAL
+## 5  1976 ALABAMA AL                1        63       41 US HOUSE        2 GEN   FALSE  FALSE   "WILLIAM L \\… REPU… FALSE   TOTAL
+## 6  1976 ALABAMA AL                1        63       41 US HOUSE        2 GEN   FALSE  FALSE   "WRITEIN"      <NA>  TRUE    TOTAL
+## # ℹ 5 more variables: candidatevotes <dbl>, totalvotes <dbl>, unofficial <lgl>, version <dbl>, fusion_ticket <lgl>
+```
+
 ## Milestone #3
 
 ## Data Cleaning
-```{r clean}
+
+``` r
 mit_clean <- mit |>
   filter(year == 2022, stage == "GEN") |>
   filter(party %in% c("DEMOCRAT", "REPUBLICAN")) |>
@@ -67,11 +98,7 @@ mit_clean <- mit |>
 
 ## Data Visualization
 
-```{r}
-knitr::opts_chunk$set(echo = TRUE, fig.show = "asis", fig.width = 8, fig.height = 5)
-```
-
-```{r}
+``` r
 ggplot(mit_clean, aes(x = vote_share, fill = party)) +
   geom_histogram(binwidth = 5, color = "white") +
   scale_fill_manual(values = c("DEMOCRAT" = "#1375B7", "REPUBLICAN" = "#C93135")) +
@@ -83,4 +110,6 @@ ggplot(mit_clean, aes(x = vote_share, fill = party)) +
        caption = "Source: MIT Election Data and Science Lab") +
   theme_minimal()
 ```
+
+![plot of chunk visualization](figure/visualization-1.png)
 
