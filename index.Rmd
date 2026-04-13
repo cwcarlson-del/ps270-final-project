@@ -88,3 +88,44 @@ plot_q4
 ```
 
 
+## Milestone #4
+
+## Data Merging
+```{r}
+fec_clean <- fec |>
+  filter(str_starts(CAND_ID, "H")) |>
+  mutate(TTL_DISB = as.numeric(TTL_DISB),
+         CAND_OFFICE_DISTRICT = str_pad(CAND_OFFICE_DISTRICT, width = 2, pad = "0"))
+
+mit_clean <- mit_clean |>
+  mutate(district = str_pad(as.character(district), width = 2, pad = "0"))
+
+merged <- inner_join(fec_clean, mit_clean,
+  by = c("CAND_OFFICE_ST" = "state_po",
+         "CAND_OFFICE_DISTRICT" = "district")) |>
+  filter(!is.na(TTL_DISB), !is.na(vote_share)) |>
+  distinct(CAND_OFFICE_ST, CAND_OFFICE_DISTRICT, .keep_all = TRUE)
+
+head(merged)
+```
+## Analysis
+```{r}
+model <- lm(vote_share ~ TTL_DISB, data = merged)
+summary(model)
+```
+
+## Results Visualization
+```{r}
+ggplot(merged, aes(x = TTL_DISB / 1e6, y = vote_share)) +
+  geom_point(alpha = 0.5, size = 2) +
+  geom_smooth(method = "lm", se = TRUE) +
+  scale_x_continuous(labels = dollar_format(suffix = "M")) +
+  labs(title = "Campaign Spending vs. Vote Share in 2022 U.S. House Elections",
+       subtitle = "Each point represents one congressional district",
+       x = "Total Campaign Spending (Millions)",
+       y = "Vote Share (%)",
+       caption = "Sources: FEC; MIT Election Data and Science Lab") +
+  theme_minimal()
+```
+
+Overall, this regression analyzes whether higher campaign spending leads to more votes in the 2022 US House election. The graph and numbers above show that campaign spending has a negative coefficient of -1.627e-07, thus potentially showing that higher spending has a little decrease in votes. On the other hand, this relationship isn't statistically significant due to the p-value of 0.132 meaning we can't say that spending has an effect on votes. Also, the R-squared (0.005) demonstrates that campaign spending explains less than 1% of the variation in vote share. Overall, the initial results are leaning on the side of disproving my hypothesis.

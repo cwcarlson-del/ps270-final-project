@@ -116,7 +116,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["1976-2024-house.tab","figure/visualization-1.png","index_files/anchor-4.2.2/anchor.min.js","index_files/bowser-1.9.3/bowser.min.js","index_files/distill-2.2.21/template.v2.js","index_files/figure-html5/unnamed-chunk-4-1.png","index_files/figure-html5/unnamed-chunk-5-1.png","index_files/figure-html5/unnamed-chunk-6-1.png","index_files/figure-html5/visualization-1.png","index_files/header-attrs-2.17/header-attrs.js","index_files/header-attrs-2.30/header-attrs.js","index_files/jquery-3.6.0/jquery-3.6.0.js","index_files/jquery-3.6.0/jquery-3.6.0.min.js","index_files/jquery-3.6.0/jquery-3.6.0.min.map","index_files/popper-2.6.0/popper.min.js","index_files/tippy-6.2.7/tippy-bundle.umd.min.js","index_files/tippy-6.2.7/tippy-light-border.css","index_files/tippy-6.2.7/tippy.css","index_files/tippy-6.2.7/tippy.umd.min.js","index_files/webcomponents-2.0.0/webcomponents.js","weball22.txt"]}
+  {"type":"character","attributes":{},"value":["1976-2024-house.tab","figure/visualization-1.png","index_files/anchor-4.2.2/anchor.min.js","index_files/bowser-1.9.3/bowser.min.js","index_files/distill-2.2.21/template.v2.js","index_files/figure-html5/unnamed-chunk-4-1.png","index_files/figure-html5/unnamed-chunk-5-1.png","index_files/figure-html5/unnamed-chunk-6-1.png","index_files/figure-html5/unnamed-chunk-9-1.png","index_files/figure-html5/visualization-1.png","index_files/header-attrs-2.17/header-attrs.js","index_files/header-attrs-2.30/header-attrs.js","index_files/jquery-3.6.0/jquery-3.6.0.js","index_files/jquery-3.6.0/jquery-3.6.0.min.js","index_files/jquery-3.6.0/jquery-3.6.0.min.map","index_files/popper-2.6.0/popper.min.js","index_files/tippy-6.2.7/tippy-bundle.umd.min.js","index_files/tippy-6.2.7/tippy-light-border.css","index_files/tippy-6.2.7/tippy.css","index_files/tippy-6.2.7/tippy.umd.min.js","index_files/webcomponents-2.0.0/webcomponents.js","weball22.txt"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
   <!--/radix_placeholder_navigation_in_header-->
@@ -1644,7 +1644,86 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </div>
 <p><img src="index_files/figure-html5/unnamed-chunk-6-1.png" alt="" width="768" /></p>
 </div>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<h2 id="milestone-4">Milestone #4</h2>
+<h2 id="data-merging">Data Merging</h2>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>fec_clean</span> <span class='op'>&lt;-</span> <span class='va'>fec</span> <span class='op'>|&gt;</span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='fu'><a href='https://stringr.tidyverse.org/reference/str_starts.html'>str_starts</a></span><span class='op'>(</span><span class='va'>CAND_ID</span>, <span class='st'>"H"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>|&gt;</span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>TTL_DISB <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>TTL_DISB</span><span class='op'>)</span>,</span>
+<span>         CAND_OFFICE_DISTRICT <span class='op'>=</span> <span class='fu'><a href='https://stringr.tidyverse.org/reference/str_pad.html'>str_pad</a></span><span class='op'>(</span><span class='va'>CAND_OFFICE_DISTRICT</span>, width <span class='op'>=</span> <span class='fl'>2</span>, pad <span class='op'>=</span> <span class='st'>"0"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>mit_clean</span> <span class='op'>&lt;-</span> <span class='va'>mit_clean</span> <span class='op'>|&gt;</span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>district <span class='op'>=</span> <span class='fu'><a href='https://stringr.tidyverse.org/reference/str_pad.html'>str_pad</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span><span class='op'>(</span><span class='va'>district</span><span class='op'>)</span>, width <span class='op'>=</span> <span class='fl'>2</span>, pad <span class='op'>=</span> <span class='st'>"0"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>merged</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>inner_join</a></span><span class='op'>(</span><span class='va'>fec_clean</span>, <span class='va'>mit_clean</span>,</span>
+<span>  by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"CAND_OFFICE_ST"</span> <span class='op'>=</span> <span class='st'>"state_po"</span>,</span>
+<span>         <span class='st'>"CAND_OFFICE_DISTRICT"</span> <span class='op'>=</span> <span class='st'>"district"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>|&gt;</span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>TTL_DISB</span><span class='op'>)</span>, <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>vote_share</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>|&gt;</span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/distinct.html'>distinct</a></span><span class='op'>(</span><span class='va'>CAND_OFFICE_ST</span>, <span class='va'>CAND_OFFICE_DISTRICT</span>, .keep_all <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>merged</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code># A tibble: 6 × 49
+  CAND_ID  CAND_NAME CAND_ICI PTY_CD CAND_PTY_AFFILIATION TTL_RECEIPTS
+  &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;                       &lt;dbl&gt;
+1 H2AK002… CONSTANT… C             1 DEM                       164638.
+2 H0AL010… AVERHART… O             1 DEM                            0 
+3 H0AL022… HARVEY-H… C             1 DEM                        60440.
+4 H2AL031… VEASEY, … C             1 DEM                         9968 
+5 H8AL040… NEIGHBOR… C             1 DEM                        22648.
+6 H2AL051… WARNER-S… O             1 DEM                        85150 
+# ℹ 43 more variables: TRANS_FROM_AUTH &lt;dbl&gt;, TTL_DISB &lt;dbl&gt;,
+#   TRANS_TO_AUTH &lt;dbl&gt;, COH_BOP &lt;dbl&gt;, COH_COP &lt;dbl&gt;,
+#   CAND_CONTRIB &lt;dbl&gt;, CAND_LOANS &lt;dbl&gt;, OTHER_LOANS &lt;dbl&gt;,
+#   CAND_LOAN_REPAY &lt;dbl&gt;, OTHER_LOAN_REPAY &lt;dbl&gt;,
+#   DEBTS_OWED_BY &lt;dbl&gt;, TTL_INDIV_CONTRIB &lt;dbl&gt;,
+#   CAND_OFFICE_ST &lt;chr&gt;, CAND_OFFICE_DISTRICT &lt;chr&gt;,
+#   SPEC_ELECTION &lt;lgl&gt;, PRIM_ELECTION &lt;lgl&gt;, RUN_ELECTION &lt;lgl&gt;, …</code></pre>
+</div>
+<h2 id="analysis">Analysis</h2>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>vote_share</span> <span class='op'>~</span> <span class='va'>TTL_DISB</span>, data <span class='op'>=</span> <span class='va'>merged</span><span class='op'>)</span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code>
+Call:
+lm(formula = vote_share ~ TTL_DISB, data = merged)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-41.43 -13.43   0.04  13.40  48.99 
+
+Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  5.096e+01  8.600e-01  59.252   &lt;2e-16 ***
+TTL_DISB    -3.669e-07  1.948e-07  -1.883   0.0604 .  
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 17.36 on 425 degrees of freedom
+Multiple R-squared:  0.008276,  Adjusted R-squared:  0.005942 
+F-statistic: 3.547 on 1 and 425 DF,  p-value: 0.06035</code></pre>
+</div>
+<h2 id="results-visualization">Results Visualization</h2>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>merged</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>TTL_DISB</span> <span class='op'>/</span> <span class='fl'>1e6</span>, y <span class='op'>=</span> <span class='va'>vote_share</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='op'>(</span>alpha <span class='op'>=</span> <span class='fl'>0.5</span>, size <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_smooth.html'>geom_smooth</a></span><span class='op'>(</span>method <span class='op'>=</span> <span class='st'>"lm"</span>, se <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_continuous.html'>scale_x_continuous</a></span><span class='op'>(</span>labels <span class='op'>=</span> <span class='fu'><a href='https://scales.r-lib.org/reference/dollar_format.html'>dollar_format</a></span><span class='op'>(</span>suffix <span class='op'>=</span> <span class='st'>"M"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>title <span class='op'>=</span> <span class='st'>"Campaign Spending vs. Vote Share in 2022 U.S. House Elections"</span>,</span>
+<span>       subtitle <span class='op'>=</span> <span class='st'>"Each point represents one congressional district"</span>,</span>
+<span>       x <span class='op'>=</span> <span class='st'>"Total Campaign Spending (Millions)"</span>,</span>
+<span>       y <span class='op'>=</span> <span class='st'>"Vote Share (%)"</span>,</span>
+<span>       caption <span class='op'>=</span> <span class='st'>"Sources: FEC; MIT Election Data and Science Lab"</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_minimal</a></span><span class='op'>(</span><span class='op'>)</span></span></code></pre>
+</div>
+<p><img src="index_files/figure-html5/unnamed-chunk-9-1.png" alt="" width="768" /></p>
+</div>
+<p>Overall, this regression analyzes whether higher campaign spending leads to more votes in the 2022 US House election. The graph and numbers above show that campaign spending has a negative coefficient of -1.627e-07, thus potentially showing that higher spending has a little decrease in votes. On the other hand, this relationship isn’t statistically significant due to the p-value of 0.132 meaning we can’t say that spending has an effect on votes. Also, the R-squared (0.005) demonstrates that campaign spending explains less than 1% of the variation in vote share. Overall, the initial results are leaning on the side of disproving my hypothesis.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
