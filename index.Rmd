@@ -1,5 +1,5 @@
 ---
-title: "Does Money Win Elections? A Dive into Campaign Spendng and Electoral Success in 2022"
+title: "Does Money Win Elections? A Dive into Campaign Spending and Electoral Success in 2022"
 author: "Charlie Carlson" 
 description: "An analysis of the relationship between campaign spending and vote share in 2022 U.S. House elections"
 output:
