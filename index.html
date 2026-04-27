@@ -89,7 +89,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
 
   <!--radix_placeholder_meta_tags-->
-  <title>Does Money Win Elections? A Dive into Campaign Spendng and Electoral Success in 2022</title>
+  <title>Does Money Win Elections? A Dive into Campaign and Electoral Success in 2022</title>
 
   <meta property="description" itemprop="description" content="An analysis of the relationship between campaign spending and vote share in 2022 U.S. House elections"/>
 
@@ -97,21 +97,21 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <meta name="article:author" content="Charlie Carlson"/>
 
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
-  <meta property="og:title" content="Does Money Win Elections? A Dive into Campaign Spendng and Electoral Success in 2022"/>
+  <meta property="og:title" content="Does Money Win Elections? A Dive into Campaign and Electoral Success in 2022"/>
   <meta property="og:type" content="article"/>
   <meta property="og:description" content="An analysis of the relationship between campaign spending and vote share in 2022 U.S. House elections"/>
   <meta property="og:locale" content="en_US"/>
 
   <!--  https://dev.twitter.com/cards/types/summary -->
   <meta property="twitter:card" content="summary"/>
-  <meta property="twitter:title" content="Does Money Win Elections? A Dive into Campaign Spendng and Electoral Success in 2022"/>
+  <meta property="twitter:title" content="Does Money Win Elections? A Dive into Campaign and Electoral Success in 2022"/>
   <meta property="twitter:description" content="An analysis of the relationship between campaign spending and vote share in 2022 U.S. House elections"/>
 
   <!--/radix_placeholder_meta_tags-->
   <!--radix_placeholder_rmarkdown_metadata-->
 
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","author","description","output"]}},"value":[{"type":"character","attributes":{},"value":["Does Money Win Elections? A Dive into Campaign Spendng and Electoral Success in 2022"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name"]}},"value":[{"type":"character","attributes":{},"value":["Charlie Carlson"]}]}]},{"type":"character","attributes":{},"value":["An analysis of the relationship between campaign spending and vote share in 2022 U.S. House elections"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained"]}},"value":[{"type":"logical","attributes":{},"value":[false]}]}]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","author","description","output"]}},"value":[{"type":"character","attributes":{},"value":["Does Money Win Elections? A Dive into Campaign and Electoral Success in 2022"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name"]}},"value":[{"type":"character","attributes":{},"value":["Charlie Carlson"]}]}]},{"type":"character","attributes":{},"value":["An analysis of the relationship between campaign spending and vote share in 2022 U.S. House elections"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained"]}},"value":[{"type":"logical","attributes":{},"value":[false]}]}]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   
@@ -1519,7 +1519,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"Does Money Win Elections? A Dive into Campaign Spendng and Electoral Success in 2022","description":"An analysis of the relationship between campaign spending and vote share in 2022 U.S. House elections","authors":[{"author":"Charlie Carlson","authorURL":"#","affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}]}
+{"title":"Does Money Win Elections? A Dive into Campaign and Electoral Success in 2022","description":"An analysis of the relationship between campaign spending and vote share in 2022 U.S. House elections","authors":[{"author":"Charlie Carlson","authorURL":"#","affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}]}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -1529,7 +1529,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--/radix_placeholder_site_before_body-->
 
 <div class="d-title">
-<h1>Does Money Win Elections? A Dive into Campaign Spendng and Electoral Success in 2022</h1>
+<h1>Does Money Win Elections? A Dive into Campaign and Electoral Success in 2022</h1>
 
 <!--radix_placeholder_categories-->
 <!--/radix_placeholder_categories-->
@@ -1551,13 +1551,10 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <p>Moving forward, my analysis will draw from data from two sets. The first one comes from the Federal Election Committee (FEC) candidate summary file for the 2021 to 2022 election cycle. This data is referred to as the total campaign expenditures, and will be for the independent/explanatory variable for this study. More specifically, this data has captured all spending including advertising, travel, staffing, and voter outreach. The parameters captured vary across the many candidates from a couple thousand dollars in secured districts to millions in competitive races.</p>
 <p>Secondly, the next data set comes from the MIT Election Data and Science Lab’s US House election results file. This file has data on elections ranging from 1976 to 2024. The main piece of data in this set is vote share calculated by the percentage of total votes a candidates received in their congressional district in 2022. This data is also referred to as the dependent/outcome variable. The candidates in this study only include Democrats and Republicans, and does not contain any uncontested races, in which a candidate received 100% of the vote. I am doing this to ensure that the relationship between spending and electoral performance is as least distorted as possible.</p>
 <p>Lastly, this data is a cross-sectional research design, which essentially means that spending on campaigns and vote share are found at a single point in time for each of the 427 districts in 2022. Furthermore, in order for my hypothesis to be supported, I would need to see a positive and statistically significant coefficient on campaign spending in my regression. In other words, I would need to see mainly districts where the top spender has a higher vote share. On the other hand, my hypothesis would simply be rejected if my p-value is less than an alpha of 0.05.</p>
-<hr />
-<h2 id="data-visualization">Data Visualization</h2>
 <div class="layout-chunk" data-layout="l-body">
 <p><img src="index_files/figure-html5/outcome-plot-1.png" alt="" width="768" /></p>
 </div>
 <h2 id="results">Results</h2>
-<h2 id="analysis">Analysis</h2>
 <div class="layout-chunk" data-layout="l-body">
 <table>
 <caption><span id="tab:regression-table">Table 1: </span>Effect of Campaign Spending on Vote Share (2022 U.S. House Elections)</caption>
@@ -1588,7 +1585,6 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </tbody>
 </table>
 </div>
-<h2 id="results-visualization">Results Visualization</h2>
 <div class="layout-chunk" data-layout="l-body">
 <p><img src="index_files/figure-html5/unnamed-chunk-1-1.png" alt="" width="768" /></p>
 </div>
