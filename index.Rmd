@@ -1,7 +1,7 @@
 ---
-title: "PS270 Final Project"
+title: "Does Money Win Elections? A Dive into Campaign Spendng and Electoral Success in 2022"
 author: "Charlie Carlson" 
-description: "My final project"
+description: "An analysis of the relationship between campaign spending and vote share in 2022 U.S. House elections"
 output:
   distill::distill_article:
     self_contained: false
@@ -9,28 +9,32 @@ output:
 
 
 
-## Project thoughts
+## Introduction
+Does spending more money on a political campaign lead to winning more votes? This is one of the most debated and controversial questions in American politics, especially since the Citizens United v. FEC. Essentially, this case ruled that the First Amendment doesn't allow the government to restrict independent political expenditures by corporations and unions. In other words, this decision allowed unlimited spending by outside groups, and led to the creation of Super PACs. Since this decision in 2010, every election cycle has had candidates and parties spend billions of dollars on ads, outreach, committees, etc. However, it remains unclear if this spending actually leads to more electoral success.
 
-I am interested in exploring data related to campaign spending and electoral performance. Basically, I want to investigate if higher campaign spending actually correlates with more electoral success. Using the data from the FEC, I will be able to analyze the relation. Lastly, through data visualization and regression analysis, this project will be able to accurately inform me if campaign spending and electoral performance are positively correlated.
-
-
-## Milestone #2
-
-Research Question: Does higher spending on campaigns lead to more electoral success in US congressional elections?
-
-Paragraph: To begin, I am going to get my data from the Federal Election Commission (FEC), and I hypothesize that candidates who spend more money on their campaigns end up getting a higher share of votes. I say this because of the resource mobilization theory. This concept refers to the idea that money allows candidates to purchase ads, hire more staff, build name recognition, and conduct voter outreach, which should lead to more votes. Another way of saying this, spending is a resource that pushes better-funded candidates into a more advantageous position, regardless of actual policy/leadership. Secondly, the explanatory variable in this experiment is the total campaign expenditures for each candidate in an election (measured by the FEC). This variable will have a lot of variation for each candidate, ranging from a couple thousand dollars to millions. Third, the outcome variable is the vote share for each candidate. This is measured by the % of total votes received by candidate in their race. Lastly, a pattern that would support my hypothesis would be a statistically significant positive coefficient on campaign spending in a regression of vote share on expenditures. In other words, this means that candidates who spend more, usually win a larger share of votes. On the other hand, my hypothesis would be proven false if the regression shows that there is no statistically significant relationship/negative relationship for spending and vote share. 
+Therefore, my project will address the following research question: Does higher spending on campaigns lead to more electoral success in US congressional elections? The resource mobilization theory states that money allows candidates to build name recognition through more advertising, outreach, staff, etc., and thus I hypothesize that candidates who spend more money on their campaigns end up receiving a higher share of votes. I believe that this question is important for several reasons. First, if this hypothesis ends up being true, I think that it's fair to say that these financial resources provide an inherent inequality that skews our elections and dismantle the founding idea that we are all equal. Building on the idea above, if wealthier candidates and those backed by large amounts of money have a structural advantage over less-funded candidates, how can we expect the best people to be in office and make decisions about our everyday life? Overall, thus question has implications for every single American citizen.
 
 
-## Code for Milestone #2:
+## Data
 
-```{r}
+Moving forward, my analysis will draw from data from two sets. The first one comes from the Federal Election Committee (FEC) candidate summary file for the 2021 to 2022 election cycle. This data is referred to as the total campaign expenditures, and will be for the independent/explanatory variable for this study. More specifically, this data has captured all spending including advertising, travel, staffing, and voter outreach. The parameters captured vary across the many candidates from a couple thousand dollars in secured districts to millions in competitive races. 
+
+Secondly, the next data set comes from the MIT Election Data and Science Lab's US House election results file. This file has data on elections ranging from 1976 to 2024. The main piece of data in this set is vote share calculated by the percentage of total votes a candidates received in their congressional district in 2022. This data is also referred to as the dependent/outcome variable. The candidates in this study only include Democrats and Republicans, and does not contain any uncontested races, in which a candidate received 100% of the vote. I am doing this to ensure that the relationship between spending and electoral performance is as least distorted as possible.
+
+Lastly, this data is a cross-sectional research design, which essentially means that spending on campaigns and vote share are found at a single point in time for each of the 427 districts in 2022. Furthermore, in order for my hypothesis to be supported, I would need to see a positive and statistically significant coefficient on campaign spending in my regression. In other words, I would need to see mainly districts where the top spender has a higher vote share. On the other hand, my hypothesis would simply be rejected if my p-value is less than an alpha of 0.05.
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE,
+                      fig.show = "asis", fig.width = 8, fig.height = 5)
 library(tidyverse)
 library(scales)
+library(modelsummary)
 ```
 
 
 
-```{r}
+```{r load-data, include=FALSE}
 fec_cols <- c("CAND_ID", "CAND_NAME", "CAND_ICI", "PTY_CD", "CAND_PTY_AFFILIATION",
               "TTL_RECEIPTS", "TRANS_FROM_AUTH", "TTL_DISB", "TRANS_TO_AUTH",
               "COH_BOP", "COH_COP", "CAND_CONTRIB", "CAND_LOANS", "OTHER_LOANS",
@@ -42,56 +46,18 @@ fec_cols <- c("CAND_ID", "CAND_NAME", "CAND_ICI", "PTY_CD", "CAND_PTY_AFFILIATIO
 fec <- read_delim("weball22.txt", delim = "|", col_names = fec_cols,
                   show_col_types = FALSE)
 
-head(fec)
-```
-
-```{r}
 mit <- read_csv("1976-2024-house.tab", show_col_types = FALSE)
-
-head(mit)
 ```
 
-## Milestone #3
 
-## Data Cleaning
-
-```{r}
+```{r clean-data, include=FALSE}
 mit_clean <- mit |>
   filter(year == 2022, stage == "GEN") |>
   filter(party %in% c("DEMOCRAT", "REPUBLICAN")) |>
   filter(!is.na(candidatevotes), !is.na(totalvotes)) |>
   mutate(vote_share = (candidatevotes / totalvotes) * 100) |>
   filter(vote_share < 100)
-```
 
----
-
-## Data Visualization
-
-```{r}
-knitr::opts_chunk$set(echo = TRUE, fig.show = "asis", fig.width = 8, fig.height = 5)
-```
-
-```{r}
-plot_q4 <- ggplot(mit_clean, aes(x = vote_share, fill = party)) +
-  geom_histogram(binwidth = 5, color = "white") +
-  scale_fill_manual(values = c("DEMOCRAT" = "#1375B7", "REPUBLICAN" = "#C93135")) +
-  labs(title = "Distribution of Vote Share in 2022 U.S. House Elections",
-       subtitle = "General election candidates only, by party",
-       x = "Vote Share (%)",
-       y = "Number of Candidates",
-       fill = "Party",
-       caption = "Source: MIT Election Data and Science Lab") +
-  theme_minimal()
-
-plot_q4
-```
-
-
-## Milestone #4
-
-## Data Merging
-```{r}
 fec_clean <- fec |>
   filter(str_starts(CAND_ID, "H")) |>
   mutate(TTL_DISB = as.numeric(TTL_DISB),
@@ -104,19 +70,40 @@ merged <- inner_join(fec_clean, mit_clean,
   by = c("CAND_OFFICE_ST" = "state_po",
          "CAND_OFFICE_DISTRICT" = "district")) |>
   filter(!is.na(TTL_DISB), !is.na(vote_share)) |>
-  distinct(CAND_OFFICE_ST, CAND_OFFICE_DISTRICT, .keep_all = TRUE)
+  distinct(CAND_OFFICE_ST, CAND_OFFICE_DISTRICT, .keep_all = TRUE) |>
+  mutate(spending_millions = TTL_DISB / 1e6)
 
-head(merged)
-```
-## Analysis
-```{r}
-model <- lm(vote_share ~ TTL_DISB, data = merged)
-summary(model)
 ```
 
-## Results Visualization
+
+```{r outcome-plot}
+ggplot(mit_clean, aes(x = vote_share, fill = party)) +
+  geom_histogram(binwidth = 5, color = "white") +
+  scale_fill_manual(values = c("DEMOCRAT" = "#1375B7", "REPUBLICAN" = "#C93135")) +
+  labs(title = "Distribution of Vote Share in 2022 U.S. House Elections",
+       subtitle = "General election candidates only, by party",
+       x = "Vote Share (%)",
+       y = "Number of Candidates",
+       fill = "Party",
+       caption = "Source: MIT Election Data and Science Lab") +
+  theme_minimal()
+```
+
+## Results
+
+```{r regression-table}
+model <- lm(vote_share ~ spending_millions, data = merged)
+
+model_summary <- summary(model)
+
+knitr::kable(model_summary$coefficients,
+             digits = 3,
+             col.names = c("Estimate", "Std. Error", "t-value", "p-value"),
+             caption = "Effect of Campaign Spending on Vote Share (2022 U.S. House Elections)")
+```
+
 ```{r}
-ggplot(merged, aes(x = TTL_DISB / 1e6, y = vote_share)) +
+ggplot(merged, aes(x = spending_millions, y = vote_share)) +
   geom_point(alpha = 0.5, size = 2) +
   geom_smooth(method = "lm", se = TRUE) +
   scale_x_continuous(labels = dollar_format(suffix = "M")) +
@@ -128,4 +115,20 @@ ggplot(merged, aes(x = TTL_DISB / 1e6, y = vote_share)) +
   theme_minimal()
 ```
 
-Overall, this regression analyzes whether higher campaign spending leads to more votes in the 2022 US House election. The graph and numbers above show that campaign spending has a negative coefficient of -1.627e-07, thus potentially showing that higher spending has a little decrease in votes. On the other hand, this relationship isn't statistically significant due to the p-value of 0.132 meaning we can't say that spending has an effect on votes. Also, the R-squared (0.005) demonstrates that campaign spending explains less than 1% of the variation in vote share. Overall, the initial results are leaning on the side of disproving my hypothesis.
+To begin, this scatter plot illustrates the relationship between total campaign spending and the percentage of vote share a candidate received across the 427 congressional districts in the 2022 US House elections. As we can see above, the regression line is shaped slightly downwards, implying that higher spending is barely associated with a lower vote share, instead of a higher share. This result goes completely against my hypothesis stated above.
+
+Furthermore, the regression table above the scatter plot confirms this pattern because the coefficient for campaign spending is -0.367. This means that for every additional million dollars spent on a campaign, the vote share decreased by 0.367 percentage points. In addition, the p-value is 0.061, so we fail to reject the null hypothesis that spending has has no effect on vote share at the 0.05 alpha. This also means we find no support for the alternative hypothesis that spending is positively associated with vote share (the coefficient points in the opposite direction entirely). Moving on, the standard error of 0.195 is pretty large, meaning that there's a lot of uncertainty around our coefficient's estimate. What this really means is that the true effect of spending ranges from slightly positive to strongly negative. But this mainly means we can't be confident in the the value we got as our coefficient. Lastly, we can interpret the intercept of 50.96 as a candidate who spent nothing would expect to get 51% of the vote share, reflecting the concept that most districts are held by incumbents who don't have to spend money to win.
+
+Overall, in terms of actual substantive meaning, even if the coefficient in this situation was statistically significant, it wouldn't really mean much because a decrease of 3.67% for every million dollars spent doesn't make much sense at all. Building on this idea, we shouldn't interpret the results as causal. I say this because this study was cross-sectional, with no random assignment of spending. Not to mention, this observation is an example of reverse causality: candidates in competitive races usually raise/spend more because of the potential risk of losing their race. Hence, most of the time higher spending is caused by a tight race and not success. In the end, to really find accurate results regarding spending and vote share, we would need to control many more factors.
+
+
+## Conclusion
+In conclusion, my analysis found that there's no statistically significant relationship between the amount of money spent and vote share in the 2022 US House elections. As discussed above, there was a correlation coefficient of -0.367 and a p-value of 0.061, thus implying that for every million dollars spent, the vote share percentage would decrease by 3.67%. Also, with the p-value being 0.061, we can't reject the null hypothesis that states money has no effect on vote share. Both of these stats do not support my hypothesis that higher spending leads to a higher vote share. However, there were many limitations to this study. First, the data sets that I used, was merged based on the state and district, not the candidate name. This could have potentially led to mismatches and reduced quality of data. Next, as mentioned in the previous section, we had reverse causality: candidates in closer races usually spend a bit more, thus implying that higher spending could be caused by a close race, instead of driving electoral success. Third, I did not have a control variable (incumbency status, district partisan lean, candidate quality, etc) to eliminate potential confounding threats and make this study more accurate. To improve in the future, I would have to find data and use a name-matched merge for more accuracy, add a couple control variables, and maybe even use a variable strategy to better isolate the causal effect of spending on electoral outcomes.
+
+
+
+
+
+
+```{r print-code, ref.label=knitr::all_labels(), echo=TRUE, eval=FALSE}
+```
