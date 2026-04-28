@@ -95,6 +95,7 @@ ggplot(mit_clean, aes(x = vote_share, fill = party)) +
 model <- lm(vote_share ~ spending_millions, data = merged)
 
 model_summary <- summary(model)
+rownames(model_summary$coefficients) <- c("Intercept", "Spending in Millions")
 
 knitr::kable(model_summary$coefficients,
              digits = 3,
